@@ -260,11 +260,10 @@ export class App extends React.Component {
     return(    <div className="App">
     <h0 className="Questions"> {this.state.questions[this.state.rand].task}</h0>
     <div className="Answers"> 
-
-       <button onClick={() => this.AnswersButton(1)}>Вариант 1: {this.state.questions[this.state.rand].answer1}</button>
-       <button onClick={() => this.AnswersButton(2)}>Вариант 2: {this.state.questions[this.state.rand].answer2}</button>
-       <button onClick={() => this.AnswersButton(3)}>Вариант 3: {this.state.questions[this.state.rand].answer3}</button>
-       <button onClick={() => this.AnswersButton(4)}>Вариант 4: {this.state.questions[this.state.rand].answer4}</button>
+      <p><button onClick={() => this.AnswersButton(1)} className = "but_res">Вариант 1: {this.state.questions[this.state.rand].answer1}</button></p>
+      <p><button onClick={() => this.AnswersButton(2)} className = "but_res">Вариант 2: {this.state.questions[this.state.rand].answer2}</button></p>
+      <p><button onClick={() => this.AnswersButton(3)} className = "but_res">Вариант 3: {this.state.questions[this.state.rand].answer3}</button></p>
+      <p><button onClick={() => this.AnswersButton(4)} className = "but_res">Вариант 4: {this.state.questions[this.state.rand].answer4}</button></p>
 
      </div>
      <div>
