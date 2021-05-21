@@ -211,20 +211,40 @@ export class App extends React.Component {
     </ul>);
   }
 
-  renderArrayResults = () => {
-    return this.state.show_results.map(({ topic, task, your_answer, true_answer, result}) => 
-      <tr>
-        <td className = "Td">{topic} </td>
-        <td className = "Td">{task} </td>
-        <td>{your_answer} </td>
-        <td>{true_answer} </td>
-        <td>{result}</td>
-      </tr>);
+  renderArrayResults = () => 
+  {
+    return this.state.show_results.map(function res({ topic, task, your_answer, true_answer, result})
+    {
+      if(result === "Верно")
+      {
+        return(
+        <tr>
+          <td className = "Td">{topic} </td>
+          <td className = "Td">{task} </td>
+          <td>{your_answer} </td>
+          <td>{true_answer} </td>
+          <td  className = "td_green">{result}</td>
+        </tr>
+        );
+      }
+      else
+      {
+        return(
+          <tr>
+            <td className = "Td">{topic} </td>
+            <td className = "Td">{task} </td>
+            <td>{your_answer} </td>
+            <td>{true_answer} </td>
+            <td className = "td_red">{result}</td>
+          </tr>
+        )
+      }
+    })
   }
+      
 
   WriteTopic(){
-    return(    
-    
+    return( 
     <div className="App">
       <div className="Answers"> 
         <ul>{this.renderArrayTopics()}</ul>
@@ -235,7 +255,7 @@ export class App extends React.Component {
       </div>
     </div>)
   }
-
+  
   WriteQuestions(){
     return(    <div className="App">
     <h0 className="Questions"> {this.state.questions[this.state.rand].task}</h0>
@@ -247,7 +267,7 @@ export class App extends React.Component {
        <button onClick={() => this.AnswersButton(4)}>Вариант 4: {this.state.questions[this.state.rand].answer4}</button>
 
      </div>
-     <div  >
+     <div>
       
     <div className="Result">
       
@@ -259,7 +279,7 @@ export class App extends React.Component {
      </div>
     </div>)
   }
-
+  
   WriteResults(){
     return(    
     <div className="App">
@@ -267,7 +287,14 @@ export class App extends React.Component {
         <table /*border="1"  width="30%" height="50%" cellpadding="0" cellspacing="0"*/>
           <thead>
             <tr>
-                <th colspan="2">Результаты</th>
+                <th colspan="5">Результаты</th>
+            </tr>
+            <tr>
+              <th>Тема</th>
+              <th>Задание</th>
+              <th>Ваш ответ</th>
+              <th>Верный ответ</th>
+              <th>Вердикт</th>
             </tr>
           </thead>
           <tbody>
