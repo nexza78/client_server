@@ -201,13 +201,9 @@ export class App extends React.Component {
 
   renderArrayTopics = () => {
     return this.state.list_of_topics.map(({ id, topic}) =>
-     <ul>
-       <label>
-         <input type="checkbox"  id={id}  onClick={e => {
-            this.ChooseTopic(e.target.id)}
-         }>
-        </input>{id} {topic}
-      </label>
+     <ul className = "Topics">
+       <input type="checkbox"  id={id}  onClick={e => {this.ChooseTopic(e.target.id)}}></input>
+       <label for = {id}>{id} {topic}</label>
     </ul>);
   }
 
@@ -246,9 +242,7 @@ export class App extends React.Component {
   WriteTopic(){
     return( 
     <div className="App">
-      <div className="Answers"> 
-        <ul>{this.renderArrayTopics()}</ul>
-      </div>
+        <div className = "Topics_div">{this.renderArrayTopics()}</div>
       <div>
         <div className='Text'>
         </div >
@@ -257,25 +251,19 @@ export class App extends React.Component {
   }
   
   WriteQuestions(){
-    return(    <div className="App">
-    <h0 className="Questions"> {this.state.questions[this.state.rand].task}</h0>
-    <div className="Answers"> 
-      <p><button onClick={() => this.AnswersButton(1)} className = "but_res">Вариант 1: {this.state.questions[this.state.rand].answer1}</button></p>
-      <p><button onClick={() => this.AnswersButton(2)} className = "but_res">Вариант 2: {this.state.questions[this.state.rand].answer2}</button></p>
-      <p><button onClick={() => this.AnswersButton(3)} className = "but_res">Вариант 3: {this.state.questions[this.state.rand].answer3}</button></p>
-      <p><button onClick={() => this.AnswersButton(4)} className = "but_res">Вариант 4: {this.state.questions[this.state.rand].answer4}</button></p>
-
-     </div>
-     <div>
-      
-    <div className="Result">
-      
-    <ul>Ваш Ответ:{this.state.answer} </ul>
-    <ul> Результат:{this.state.result} </ul> </div>
-     <div className='Text'>
-      
-     </div >
-     </div>
+    return(    
+    <div className="App">
+      <div className="Answers">
+        <div className="Questions"> {this.state.questions[this.state.rand].task}</div>
+        <p><button onClick={() => this.AnswersButton(1)} className = "but_res">Вариант 1: {this.state.questions[this.state.rand].answer1}</button></p>
+        <p><button onClick={() => this.AnswersButton(2)} className = "but_res">Вариант 2: {this.state.questions[this.state.rand].answer2}</button></p>
+        <p><button onClick={() => this.AnswersButton(3)} className = "but_res">Вариант 3: {this.state.questions[this.state.rand].answer3}</button></p>
+        <p><button onClick={() => this.AnswersButton(4)} className = "but_res">Вариант 4: {this.state.questions[this.state.rand].answer4}</button></p>
+        <div className="Result">
+          <ul>Ваш Ответ:{this.state.answer} </ul>
+          <ul> Результат:{this.state.result} </ul> 
+        </div>
+      </div>
     </div>)
   }
   
