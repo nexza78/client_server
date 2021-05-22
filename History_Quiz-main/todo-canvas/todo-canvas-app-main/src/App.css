@@ -120,25 +120,105 @@ table {
   left: 45%;
 }
 .Questions{ 
-   position:sticky;
-  top: 15%;
-  left: 30%;
+  position:sticky;
+  /*left: 30%;*/
 
  font-size: 30px;
-  
+ padding-top: 20px;
+ padding-bottom: 20px;
+ color: white;
+  background-color: black;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
 }
 .Answers{
-  top: 25%;
-  left: 45%;
+  top: 5%;
   position:sticky;
   font-size: 25px;
+  background-color: rgba(68, 68, 68, 0.9);
+  width: 1000px;
+  margin: auto;
+  border-radius: 30px;
 }
+
+.Topics{
+  /*top: 5%;
+  position:sticky;
+  font-size: 25px;
+  background-color: rgba(68, 68, 68, 0.9);
+  width: 800px;
+  margin: auto;
+  border-radius: 30px;*/
+  /*
+  top: 5%;
+  position:sticky;
+  background: #FFF; 
+  font-size: 20px;
+  max-width: 1000px;
+  margin: auto;
+  height: 50px;
+  padding: 0.5em 1em;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.7);
+  border-radius: 30px;
+  margin: 30px;
+  padding-top: 5px;
+  */
+  text-decoration: none;
+  display: inline-block;
+  width:800px;
+  margin: auto;
+  line-height: 50px;
+  border-radius: 45px;
+  margin: 10px 20px;
+  font-size: 20px;
+  text-align: center;
+  background: white;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, .5);
+  transition: .3s;
+  outline:0 none !important;
+}
+
+label{
+  padding: 5px;
+}
+
+.Topics:hover{
+  /*
+  -webkit-transform: scale(1.1,1.1);
+  -webkit-transition-timing-function: ease-out;
+  -webkit-transition-duration: 550ms;
+  -moz-transform: scale(1.2,1.2);
+  -moz-transition-timing-function: ease-out;
+  -moz-transition-duration: 550ms;
+  */
+  background: #2EE59D;
+  box-shadow: 0 15px 20px rgba(46, 229, 157, .4);
+  color: white;
+  transform: translateY(-9px);
+  border-radius: 45px;
+  outline:0 none !important;
+}
+
+input{
+  opacity: 0;
+}
+
+.Topics_div{
+  top: 5%;
+  position:sticky;
+  font-size: 25px;
+  width: 1000px;
+  margin: auto;
+}
+
 .Result{
-  top: 55%;
   left: 43%;
-  position:fixed;
   font-size: 24px;
-  padding-top: 50px;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  background-color: #5cb58a;
+  border-bottom-right-radius: 30px;
+  border-bottom-left-radius: 30px;
 }
 
 /*
@@ -159,13 +239,13 @@ table {
 button{
   text-decoration: none;
   display: inline-block;
-  width: 140px;
-  height: 45px;
+  width: 500px;
+  height: 80px;
   line-height: 45px;
   border-radius: 45px;
   margin: 10px 20px;
   font-family: 'Montserrat', sans-serif;
-  font-size: 11px;
+  font-size: 24px;
   text-transform: uppercase;
   text-align: center;
   letter-spacing: 3px;
@@ -174,11 +254,90 @@ button{
   background: white;
   box-shadow: 0 8px 15px rgba(0, 0, 0, .1);
   transition: .3s;
+  outline:0 none !important;
 }
 
 button:hover {
     background: #2EE59D;
     box-shadow: 0 15px 20px rgba(46, 229, 157, .4);
     color: white;
-    transform: translateY(-7px);
+    transform: translateY(-9px);
+    border-radius: 45px;
+    outline:0 none !important;
 }
+
+
+/*
+
+html,
+body {
+  height: 100%;
+}
+body {
+  display: grid;
+}
+.check {
+  cursor: pointer;
+  position: relative;
+  margin: auto;
+  width: 18px;
+  height: 18px;
+  -webkit-tap-highlight-color: transparent;
+  transform: translate3d(0, 0, 0);
+}
+.check:before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(34,50,84,0.03);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.check svg {
+  position: relative;
+  z-index: 1;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: #c8ccd4;
+  stroke-width: 1.5;
+  transform: translate3d(0, 0, 0);
+  transition: all 0.2s ease;
+}
+.check svg path {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 0;
+}
+.check svg polyline {
+  stroke-dasharray: 22;
+  stroke-dashoffset: 66;
+}
+.check:hover:before {
+  opacity: 1;
+}
+.check:hover svg {
+  stroke: #4285f4;
+}
+#cbx:checked + .check svg {
+  stroke: #4285f4;
+}
+#cbx:checked + .check svg path {
+  stroke-dashoffset: 60;
+  transition: all 0.3s linear;
+}
+#cbx:checked + .check svg polyline {
+  stroke-dashoffset: 42;
+  transition: all 0.2s linear;
+  transition-delay: 0.15s;
+}
+*/
+/*
+ul{
+  padding: 0px;
+}
+
+*/
