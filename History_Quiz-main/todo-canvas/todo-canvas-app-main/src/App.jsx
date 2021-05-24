@@ -38,9 +38,10 @@ export class App extends React.Component {
       rand: 0,
 
     }    
-    this.AnswersButton = this.AnswersButton.bind(this);
+    this.Number_Answers = this.Number_Answers.bind(this);
     this.ChooseTopic = this.ChooseTopic.bind(this);
     this.NewQuestion = this.NewQuestion.bind(this);
+    this.Compare = this.Сompare.bind(this);
     this.assistant = initializeAssistant(() => this.getStateForAssistant() );
     this.assistant.on("data", (event/*: any*/) => {
       console.log(`assistant.on(data)`, event);
@@ -50,7 +51,6 @@ export class App extends React.Component {
     this.assistant.on("start", (event) => {
       console.log(`assistant.on(start)`, event);
     });
-
   }
 
   componentDidMount() {   
@@ -84,6 +84,10 @@ export class App extends React.Component {
            break;
          }
         case 'new_topic':{
+          this.ChooseTopic(action.note)
+          break;
+        }
+        case 'new_topic_gp':{
           this.ChooseTopic(action.note)
           break;
         }
@@ -139,49 +143,34 @@ export class App extends React.Component {
   Number_Answers (temp)  {
     if(this.state.state_answer === 0){
       if(temp==='один'||temp==='первый'||temp==='1'||temp===1){
-        this.setState({answer:this.state.questions[this.state.rand].answer1});
+        this.setState({answer:this.state.questions[this.state.rand].answer1},()=>this.Compare());
       }
       else if(temp==='два'||temp==='второй'||temp==='2'||temp===2){
-        this.setState({answer:this.state.questions[this.state.rand].answer2});
+        this.setState({answer:this.state.questions[this.state.rand].answer2},()=>this.Compare());
       }
       else if(temp==="три"||temp==="третий"||temp==="3"||temp===3){
-        this.setState({answer:this.state.questions[this.state.rand].answer3});
+        this.setState({answer:this.state.questions[this.state.rand].answer3},()=>this.Compare());
       }
       else if(temp==="четыре"||temp==="четвертый"||temp==="4"||temp===4){
-        this.setState({answer:this.state.questions[this.state.rand].answer4});
+        this.setState({answer:this.state.questions[this.state.rand].answer4},()=>this.Compare());
       }
-  
-      if(this.state.answer===this.state.questions[this.state.rand].true_answer)  
-        this.setState({result:"Верно"});   
-      else this.setState({result:"Неверно"});
-      this.setState({ show_results: [...this.state.show_results, 
-        {topic: this.state.topic.topic, 
-         task: this.state.questions[this.state.rand].task, 
-         your_answer: this.state.answer,
-         true_answer: this.state.questions[this.state.rand].true_answer, 
-         result: this.state.result}] });
     }this.setState({state_answer: 1});
   }
-  
-  AnswersButton(type) {
-    if(this.state.state_answer === 0){
-    switch(type){
-      case 1:  this.setState({answer:this.state.questions[this.state.rand].answer1});break;
-      case 2:  this.setState({answer:this.state.questions[this.state.rand].answer2});break;
-      case 3:  this.setState({answer:this.state.questions[this.state.rand].answer3});break;
-      case 4:  this.setState({answer:this.state.questions[this.state.rand].answer4});break;
-      }
-      if(this.state.answer===this.state.questions[this.state.rand].true_answer)  
-        this.setState({result:"Верно"});   
-      else this.setState({result:"Неверно"});
-       this.setState({ show_results: [...this.state.show_results, 
-        {topic: this.state.topic.topic,
-         task: this.state.questions[this.state.rand].task, 
-         your_answer: this.state.answer, 
-         true_answer: this.state.questions[this.state.rand].true_answer,
-         result: this.state.result}] 
-        });
-    }this.setState({state_answer: 1});
+  Сompare(){
+    if(this.state.answer===this.state.questions[this.state.rand].true_answer)  
+    this.setState({result:"Верно"}, ()=>{
+      this.Result();
+    });   
+    else this.setState({result:"Неверно"}, ()=>{
+      this.Result()});
+  }
+  Result(){
+    this.setState({ show_results: [...this.state.show_results, 
+      {topic: this.state.topic.topic, 
+       task: this.state.questions[this.state.rand].task, 
+       your_answer: this.state.answer,
+       true_answer: this.state.questions[this.state.rand].true_answer, 
+       result: this.state.result}] });
   }
 
   NewQuestion(){   
@@ -202,7 +191,7 @@ export class App extends React.Component {
   renderArrayTopics = () => {
     return this.state.list_of_topics.map(({ id, topic}) =>
      <ul className = "Topics">
-       <input type="checkbox"  id={id}  onClick={e => {this.ChooseTopic(e.target.id)}}></input>
+       <input type="checkbox"  id={id}  onClick={() => this.assistant_param(id, "choose_theme")} classname='input_top'></input>
        <label for = {id}>{id} {topic}</label>
     </ul>);
   }
@@ -238,6 +227,33 @@ export class App extends React.Component {
     })
   }
       
+  assistant_global_event(a)  {
+    if(this.assistant){
+      console.log("assistant_global_event");
+    }
+    this.assistant.sendData({
+      action: {
+        action_id: a
+      }
+    })
+  }
+
+  assistant_param(n, state)  {
+    this.assistant.sendData({
+      action: {
+        action_id: state,
+        parameters: {
+          number: n
+        }
+      }
+    });
+    if(state === "choose_theme"){
+      this.ChooseTopic(n);
+    }
+    else{
+      this.Number_Answers(n);
+    }
+  }
 
   WriteTopic(){
     return( 
@@ -247,7 +263,22 @@ export class App extends React.Component {
         <div className='Text'>
         </div >
       </div>
+      <p><button onClick={() =>/* this.WriteResults()*/ this.assistant_global_event("show_res")} className ="third_button">Результаты</button></p>
+      <p><button onClick={() => /*this.DeleteResults()*/ this.assistant_global_event("del_res")} className ="fourth_button">Сброс результатов</button></p>
     </div>)
+  }
+  ShowTopics() {
+    this.setState({state: 0});
+    this.WriteTopic();
+  }
+
+  ShowResults() {
+    this.setState({state: 2});
+    this.render();
+  }
+
+  DeleteResults() {
+    this.setState({show_results: []});
   }
   
   WriteQuestions(){
@@ -255,15 +286,19 @@ export class App extends React.Component {
     <div className="App">
       <div className="Answers">
         <div className="Questions"> {this.state.questions[this.state.rand].task}</div>
-        <p><button onClick={() => this.AnswersButton(1)} className = "but_res">Вариант 1: {this.state.questions[this.state.rand].answer1}</button></p>
-        <p><button onClick={() => this.AnswersButton(2)} className = "but_res">Вариант 2: {this.state.questions[this.state.rand].answer2}</button></p>
-        <p><button onClick={() => this.AnswersButton(3)} className = "but_res">Вариант 3: {this.state.questions[this.state.rand].answer3}</button></p>
-        <p><button onClick={() => this.AnswersButton(4)} className = "but_res">Вариант 4: {this.state.questions[this.state.rand].answer4}</button></p>
+        <p><button onClick={() => this.assistant_param(1, "answer")} className = "but_res">Вариант 1: {this.state.questions[this.state.rand].answer1}</button></p>
+        <p><button onClick={() => this.assistant_param(2, "answer")} className = "but_res">Вариант 2: {this.state.questions[this.state.rand].answer2}</button></p>
+        <p><button onClick={() => this.assistant_param(3, "answer")} className = "but_res">Вариант 3: {this.state.questions[this.state.rand].answer3}</button></p>
+        <p><button onClick={() => this.assistant_param(4, "answer")} className = "but_res">Вариант 4: {this.state.questions[this.state.rand].answer4}</button></p>
         <div className="Result">
-          <ul>Ваш Ответ:{this.state.answer} </ul>
-          <ul> Результат:{this.state.result} </ul> 
+          <ul>Ваш Ответ: {this.state.answer} </ul>
+          <ul> Результат: {this.state.result} </ul> 
         </div>
       </div>
+      <p><button onClick={() => this.assistant_global_event("list_theme")} className ="first_button"><span>Список тем</span></button></p>
+      <p><button onClick={() => this.assistant_global_event("next_answer")} className ="second_button"><span>Следующий вопрос</span></button></p>
+      <p><button onClick={() => this.assistant_global_event("show_res")} className ="third_button">Результаты</button></p>
+      <p><button onClick={() => this.assistant_global_event("del_res")} className ="fourth_button">Сброс результатов</button></p>
     </div>)
   }
   
@@ -294,6 +329,8 @@ export class App extends React.Component {
         <div className='Text'>
         </div>
       </div>
+      <p><button onClick={() => this.assistant_global_event("list_theme")} className ="third_button"><span>Список тем</span></button></p>
+      <p><button onClick={() => this.assistant_global_event("del_res")} className ="fourth_button">Сброс результатов</button></p>
     </div>)
   }
 
