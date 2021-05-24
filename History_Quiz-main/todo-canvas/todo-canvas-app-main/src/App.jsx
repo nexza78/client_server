@@ -51,6 +51,7 @@ export class App extends React.Component {
     this.assistant.on("start", (event) => {
       console.log(`assistant.on(start)`, event);
     });
+    this.assistant_global_event("start");
   }
 
   componentDidMount() {   
