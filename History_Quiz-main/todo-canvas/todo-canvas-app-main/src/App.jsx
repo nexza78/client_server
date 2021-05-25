@@ -244,7 +244,7 @@ export class App extends React.Component {
       this.DeleteResults();
     }
     else if(a === "list_theme"){
-      this.WriteTopic();
+      this.ShowTopics();
     }
     else {
       this.NewQuestion();
