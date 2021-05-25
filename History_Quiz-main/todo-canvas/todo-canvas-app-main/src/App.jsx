@@ -237,6 +237,18 @@ export class App extends React.Component {
         action_id: a
       }
     })
+    if(a === "show_res"){
+      this.ShowResults();
+    }
+    else if(a === "del_res"){
+      this.DeleteResults();
+    }
+    else if(a === "list_theme"){
+      this.WriteTopic();
+    }
+    else {
+      this.NewQuestion();
+    }
   }
 
   assistant_param(n, state)  {
