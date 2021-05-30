@@ -1,77 +1,61 @@
 theme:/
 
-    state: Start
-        #При запуске приложения с кнопки прилетит сообщение /start.
-        event!: start
-        q!: $regex</start>
-         #При запуске приложения с голоса прилетит сказанная фраза.
-        q!: (запусти | открой | включи) Запомни дату
-        a: Добро пожаловать в историческую викторину!
-            Чтоб начать игру, необходимо выбрать одну из предпочтительных тем и нажать на кнопку, обозначающую эту тему.
-            Переключение между вопросами происходит с помощью кнопки «следующий вопрос».
-            Кнопка «показать результаты» показывает таблицу со всеми ответами на вопросы. При желании можно сбросить все результаты, нажав на кнопку «сброс результатов».
-            Кнопка «список тем» возвращает к темам.
-        
-        script:
-            addSuggestions(["тема 1"], $context);
-            
-        go: /ВТемы
-        state: ВТемы
-            state: ВыборТемы
-                    q: (тема) 
-                     @duckling.number:: anyText || fromState = /ВТемы, onlyThisState = true 
-                    event: choose_theme || fromState = /ВТемы, onlyThisState = true
-                    
-                    if: $request.query != undefined
-                        if: $parseTree._anyText < 1
-                            a: нет такой темы!
-                            go: /ВТемы
-                        elseif: $parseTree._anyText > 4
-                            a: нет такой темы!
-                            go: /ВТемы
-                        else:
-                            random:
-                                a: Отлично, {{$request.query}}!
-                                a: {{$request.query}}!
-                                a: {{$request.query}} выбрана!
-                            script:
-                                Topic($parseTree._anyText, $context);
-                                addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
-                            
+    state: ВТемы
+        state: ВыборТемы
+                q: (тема) 
+                 @duckling.number:: anyText || fromState = /ВТемы, onlyThisState = true 
+                event: choose_theme || fromState = /ВТемы, onlyThisState = true
+                
+                if: $request.query != undefined
+                    if: $parseTree._anyText < 1
+                        a: нет такой темы!
+                        go: /ВТемы
+                    elseif: $parseTree._anyText > 4
+                        a: нет такой темы!
+                        go: /ВТемы
                     else:
                         random:
-                                a: Отлично, тема {{$request.data.eventData.number}}!
-                                a: Тема  {{$request.data.eventData.number}} выбрана!
-                                a: Тема {{$request.data.eventData.number}}!
+                            a: Отлично, {{$request.query}}!
+                            a: {{$request.query}}!
+                            a: {{$request.query}} выбрана!
                         script:
+                            Topic($parseTree._anyText, $context);
                             addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
-                    
-        
-                    state: ПравильныйОтвет
-                            q: [ответ|вариант|номер]
-                                @duckling.number:: anyText
-                            event: answer
-                            if: $request.query != undefined
-                                if: $parseTree._anyText < 1
-                                    a: нет такого ответа!
-                                elseif: $parseTree._anyText > 4
-                                    a: нет такого ответа!
-                                else:
-                                    random:
-                                        a: Ответ принят! 
-                                        a: Ответ записан!
-                                        a: Вариант записан!
-                                    script:
-                                        addNote($parseTree._anyText, $context);
-                                        addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
+                        
+                else:
+                    random:
+                            a: Отлично, тема {{$request.data.eventData.number}}!
+                            a: Тема  {{$request.data.eventData.number}} выбрана!
+                            a: Тема {{$request.data.eventData.number}}!
+                    script:
+                        addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
+                
+    
+                state: ПравильныйОтвет
+                        q: [ответ|вариант|номер]
+                            @duckling.number:: anyText
+                        event: answer
+                        if: $request.query != undefined
+                            if: $parseTree._anyText < 1
+                                a: нет такого ответа!
+                            elseif: $parseTree._anyText > 4
+                                a: нет такого ответа!
                             else:
                                 random:
                                     a: Ответ принят! 
                                     a: Ответ записан!
                                     a: Вариант записан!
                                 script:
+                                    addNote($parseTree._anyText, $context);
                                     addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
-             
+                        else:
+                            random:
+                                a: Ответ принят! 
+                                a: Ответ записан!
+                                a: Вариант записан!
+                            script:
+                                addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
+         
         
                     
     state: СписокТем
