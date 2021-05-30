@@ -249,9 +249,6 @@ export class App extends React.Component {
   }
       
   assistant_global_event(a)  {
-    if(this.assistant){
-      console.log("assistant_global_event");
-    }
     this.assistant.sendData({
       action: {
         action_id: a
@@ -263,20 +260,15 @@ export class App extends React.Component {
     else if(a === "del_res"){
       this.DeleteResults();
     }
-    else if(a === "list_theme"){
+    else{
       this.ShowTopics();
-    }
-    else {
-      this.NewQuestion();
     }
     
   }
 
   timer() {
     const a = setTimeout(() => {
-
-      this.assistant_global_event("next_question");
-
+      this.NewQuestion();
     }, 2000);
   }
 
@@ -328,19 +320,19 @@ export class App extends React.Component {
     <div className="App">
  <div className="Answers">
         <div className="Questions"> {this.state.questions[this.state.rand].task}</div>
-        <p><button /*ref={this.setTextInputRef} autoFocus={true}*/ onClick={() => this.assistant_param(1, "answer") /*this.focusTextInput()*/} className = "but_res">1: {this.state.questions[this.state.rand].answer1}</button></p>
+        <p><button /*ref={this.setTextInputRef} autoFocus={true}*/ onMouseOut="this.blur()" onClick={() => this.assistant_param(1, "answer") /*this.focusTextInput()*/} className = "but_res">1: {this.state.questions[this.state.rand].answer1}</button></p>
         
-        <p><button tabindex="1" onClick={() => this.assistant_param(2, "answer")} className = "but_res">2: {this.state.questions[this.state.rand].answer2}</button></p>
-        <p><button tabindex="1" onClick={() => this.assistant_param(3, "answer")} className = "but_res">3: {this.state.questions[this.state.rand].answer3}</button></p>
-        <p><button tabindex="1" onClick={() => this.assistant_param(4, "answer")} className = "but_res">4: {this.state.questions[this.state.rand].answer4}</button></p>
+        <p><button onClick={() => this.assistant_param(2, "answer")} className = "but_res">2: {this.state.questions[this.state.rand].answer2}</button></p>
+        <p><button onClick={() => this.assistant_param(3, "answer")} className = "but_res">3: {this.state.questions[this.state.rand].answer3}</button></p>
+        <p><button onClick={() => this.assistant_param(4, "answer")} className = "but_res">4: {this.state.questions[this.state.rand].answer4}</button></p>
         <div className="Result">
-          <ul>Ваш Ответ: {this.state.answer} </ul>
+          <ul>Ваш Ответ: {this.state.answer}</ul>
           <ul> Результат: {this.state.result} </ul> 
         </div>
       </div>
 
      <ul className="positionButtons"> <p><button onClick={() => this.assistant_global_event("list_theme")} className ="second_button"><span>Список тем</span></button></p>
-      <p><button onClick={() => this.assistant_global_event("next_question")} className ="third_button"><span>Следующий вопрос</span></button></p>
+      <p><button onClick={() => this.NewQuestion()} className ="third_button"><span>Следующий вопрос</span></button></p>
       <p><button onClick={() => this.assistant_global_event("show_res")} className ="fourth_button">Результаты</button></p></ul>
     </div>)
   }
