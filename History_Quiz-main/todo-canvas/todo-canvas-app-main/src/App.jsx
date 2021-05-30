@@ -102,10 +102,6 @@ export class App extends React.Component {
           this.ChooseTopic(action.note)
           break;
         }
-        case 'new_topic_gp':{
-          this.ChooseTopic(action.note)
-          break;
-        }
         case 'show_results':{
           this.setState({state: 2});
           break;
@@ -147,6 +143,7 @@ export class App extends React.Component {
   }
 
   ChooseTopic(number){
+    console.log("ChooseTopic(number)");
     let temp=number-1;
     this.setState({
       state:1,
@@ -156,23 +153,28 @@ export class App extends React.Component {
   }
 
   Number_Answers (temp)  {
+    console.log("Number_Answers (temp)");
     if(this.state.state_answer === 0){
       if(temp==='один'||temp==='первый'||temp==='1'||temp===1){
         this.setState({answer:this.state.questions[this.state.rand].answer1},()=>this.Compare());
+        this.timer();
       }
       else if(temp==='два'||temp==='второй'||temp==='2'||temp===2){
         this.setState({answer:this.state.questions[this.state.rand].answer2},()=>this.Compare());
+        this.timer();
       }
       else if(temp==="три"||temp==="третий"||temp==="3"||temp===3){
         this.setState({answer:this.state.questions[this.state.rand].answer3},()=>this.Compare());
+        this.timer();
       }
       else if(temp==="четыре"||temp==="четвертый"||temp==="4"||temp===4){
         this.setState({answer:this.state.questions[this.state.rand].answer4},()=>this.Compare());
+        this.timer();
       }
-    }this.setState({state_answer: 1});
-
-    this.timer();
+    }
+    this.setState({state_answer: 1});
   }
+
   Сompare(){
     if(this.state.answer===this.state.questions[this.state.rand].true_answer) {
       this.setState({result:"Верно"}, ()=>{this.Result();});
@@ -190,7 +192,8 @@ export class App extends React.Component {
        result: this.state.result}] });
   }
 
-  NewQuestion(){   
+  NewQuestion(){
+    console.log("NewQuestion()");
     const min=this.state.topic.start;
     const max=this.state.topic.finish;   
     const random=this.getRandomArbitrary(min, max);
@@ -267,6 +270,7 @@ export class App extends React.Component {
   }
 
   timer() {
+    console.log("timer()");
     const a = setTimeout(() => {
       this.NewQuestion();
     }, 2000);
@@ -284,10 +288,9 @@ export class App extends React.Component {
     if(state === "choose_theme"){
       this.ChooseTopic(n);
     }
-    if(state !== "return_answer"){
+    else{
       this.Number_Answers(n);
     }
-    
   }
 
   WriteTopic(){
@@ -316,11 +319,12 @@ export class App extends React.Component {
   }
   
   WriteQuestions(){
+    console.log("WriteQuestions()");
     return(    
     <div className="App">
  <div className="Answers">
         <div className="Questions"> {this.state.questions[this.state.rand].task}</div>
-        <p><button /*ref={this.setTextInputRef} autoFocus={true}*/ onMouseOut="this.blur()" onClick={() => this.assistant_param(1, "answer") /*this.focusTextInput()*/} className = "but_res">1: {this.state.questions[this.state.rand].answer1}</button></p>
+        <p><button onClick={() => this.assistant_param(1, "answer") /*this.focusTextInput()*/} className = "but_res">1: {this.state.questions[this.state.rand].answer1}</button></p>
         
         <p><button onClick={() => this.assistant_param(2, "answer")} className = "but_res">2: {this.state.questions[this.state.rand].answer2}</button></p>
         <p><button onClick={() => this.assistant_param(3, "answer")} className = "but_res">3: {this.state.questions[this.state.rand].answer3}</button></p>
