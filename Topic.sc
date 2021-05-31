@@ -20,7 +20,7 @@ theme:/
                             a: {{$request.query}} выбрана!
                         script:
                             Topic($parseTree._anyText, $context);
-                            addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
+                            addSuggestions(["ответ 1", "номер 2","вариант 3","список тем", "результаты"], $context);
                         
                 else:
                     random:
@@ -28,7 +28,7 @@ theme:/
                             a: Тема  {{$request.data.eventData.number}} выбрана!
                             a: Тема {{$request.data.eventData.number}}!
                     script:
-                        addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
+                        addSuggestions(["ответ 1", "номер 2","вариант 3","список тем", "результаты"], $context);
                 
     
                 state: ПравильныйОтвет
@@ -41,20 +41,12 @@ theme:/
                             elseif: $parseTree._anyText > 4
                                 a: нет такого ответа!
                             else:
-                                random:
-                                    a: Ответ принят! 
-                                    a: Ответ записан!
-                                    a: Вариант записан!
                                 script:
                                     addNote($parseTree._anyText, $context);
-                                    addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
+                                    addSuggestions(["ответ 1", "номер 2","вариант 3","список тем","результаты"], $context);
                         else:
-                            random:
-                                a: Ответ принят! 
-                                a: Ответ записан!
-                                a: Вариант записан!
                             script:
-                                addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
+                                addSuggestions(["ответ 1", "номер 2","вариант 3","список тем", "результаты"], $context);
          
         
                     
@@ -87,18 +79,18 @@ theme:/
                                 a: {{$request.query}} выбрана!
                             script:
                                 Topic($parseTree._anyText, $context);
-                                addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
+                                addSuggestions(["ответ 1", "номер 2","вариант 3","список тем", "результаты"], $context);
                     else:
                         random:
                             a: Отлично, тема {{$request.data.eventData.number}}!
                             a: Тема  {{$request.data.eventData.number}} выбрана!
                             a: Тема {{$request.data.eventData.number}}!
                             script:
-                                addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
+                                addSuggestions(["ответ 1", "номер 2","вариант 3","список тем", "результаты"], $context);
                     
         
                     state: ПравильныйОтвет
-                            q: (~ответ|~вариант)
+                            q: (~ответ|~вариант|номер)
                                 @duckling.number:: anyText
                             event: answer
                             if: $request.query != undefined
@@ -107,20 +99,12 @@ theme:/
                                 elseif: $parseTree._anyText > 4
                                     a: нет такого ответа!
                                 else:
-                                    random:
-                                        a: Ответ принят! 
-                                        a: Ответ записан!
-                                        a: Вариант записан!
                                     script:
                                         addNote($parseTree._anyText, $context);
-                                        addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
+                                        addSuggestions(["ответ 1", "номер 2","вариант 3","список тем", "результаты"], $context);
                             else:
-                                random:
-                                    a: Ответ принят! 
-                                    a: Ответ записан!
-                                    a: Вариант записан!
                                     script:
-                                        addSuggestions(["ответ 1","список тем", "следующий вопрос", "результаты"], $context);
+                                        addSuggestions(["ответ 1", "номер 2","вариант 3","список тем", "результаты"], $context);
                                 
                     
                                     
@@ -156,7 +140,10 @@ theme:/
     
     state: help || noContext=true
         q!: (помощь)
-        a: Можно нажать на одну из кнопок на экране, чтобы продолжить или начать игру. Также всегда можно воспользоваться подсказками.
+        a:  Чтобы начать игру, необходимо выбрать одну из предпочтительных тем и нажать на кнопку, обозначающую эту тему.
+            Переключение между вопросами происходит автоматически после ответа на вопрос.
+            Кнопка «показать результаты» показывает таблицу со всеми ответами на вопросы. При желании можно сбросить все результаты, нажав на кнопку «сброс результатов».
+            Кнопка «список тем» возвращает к темам.
         script:
             addSuggestions(["список тем","результаты", "сброс результатов"], $context);
         
@@ -166,21 +153,16 @@ theme:/
         a:Я умею выводить на экран темы и вопросы, также я с удовольствие приму ответ. Еще я могу вывести результаты в любой момент!
         script:
             addSuggestions(["список тем","результаты", "сброс результатов"], $context);
-
-        
-    #state: hi || noContext=true
-      #  q!: (привет)
-     #   random:
-      #     a: Приветики-пистолетики!
-       #     a: Привет!
-       #     a: Здравствуй!
-       # script:
-       #     addSuggestions(["список тем","результаты", "сброс результатов"], $context);
+    
+    state: answer_check || noContext=true
+        event!: answer_check
+        if: $request.data.eventData.number == 1
+            a: Верно
+        else:
+            a: Неверно
             
     state: CallBack || noContext=true
         event!: noMatch
         a: Я не понимаю
         script:
             addSuggestions(["список тем","результаты", "сброс результатов"], $context);
-                    
-     
