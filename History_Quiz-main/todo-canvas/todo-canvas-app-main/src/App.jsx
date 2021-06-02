@@ -182,9 +182,11 @@ export class App extends React.Component {
   Сompare(){
     if(this.state.answer===this.state.questions[this.state.rand].true_answer) {
       this.setState({result:"Верно"}, ()=>{this.Result();});
+      this.assistant_param(1, "answer_check");
     }   
     else {
-      this.setState({result:"Неверно"}, ()=>{this.Result()})
+      this.setState({result:"Неверно"}, ()=>{this.Result()});
+      this.assistant_param(0, "answer_check");
     };
   }
   Result(){
