@@ -51,8 +51,7 @@ export class App extends React.Component {
     this.focus_2st_q = this.focus_2st_q.bind(this);
     this.focus_3st_q = this.focus_3st_q.bind(this);
     this.focus_4st_q = this.focus_4st_q.bind(this);
-    this.focus_4st_q = this.focus_4st_q.bind(this);
-    this.focus_4st_q = this.focus_4st_q.bind(this);
+    this.focus_reset_q = this.focus_reset_q.bind(this);
     //Timeout = setTimeout(()=> this.assistant_global_event("next_question"), 3000);
 
     this.assistant = initializeAssistant(() => this.getStateForAssistant() );
@@ -79,6 +78,10 @@ export class App extends React.Component {
     this.myRef4.current.blur();
   }
   
+  focus_reset_q(){
+    this.myRef_reset.current.blur();
+  }
+
   focusTextInput = () => {
     // Focus the text input using the raw DOM API
     if (this.textInput) this.textInput.focus();
@@ -283,7 +286,7 @@ export class App extends React.Component {
     }
     else if(a === "del_res"){
       this.DeleteResults();
-      this.myRef_reset.current.blur();
+      this.focus_reset_q();
     }
     else{
       this.ShowTopics();
@@ -407,7 +410,7 @@ export class App extends React.Component {
         </div>
       </div>
       <ul className="positionButtons"><p><button onClick={() => this.assistant_global_event("list_theme")} className ="third_button"><span>Список тем</span></button></p>
-      <p><input ref = {this.myRef_reset} value = "Сброс" onClick={() => this.assistant_global_event("del_res")} className ="fourth_button"/></p></ul>
+      <p><input ref = {this.myRef_reset} value = "Сброс" readOnly = {true} onClick={() => this.assistant_global_event("del_res")} className ="fourth_button"/></p></ul>
     </div>)
   }
   WriteLoading(){
