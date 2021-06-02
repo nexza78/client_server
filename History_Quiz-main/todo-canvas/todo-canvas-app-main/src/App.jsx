@@ -5,6 +5,7 @@ import {
 } from "@sberdevices/assistant-client";
 import APIHelper from "./APIHelper.js"
 import "./App.css";
+import { textSpanIntersectsWithPosition } from "typescript";
 
 
 
@@ -43,6 +44,9 @@ export class App extends React.Component {
     this.myRef3 = React.createRef();
     this.myRef4 = React.createRef();
     this.myRef_reset = React.createRef();
+    this.myRef_list_theme = React.createRef();
+    this.myRef_show_res = React.createRef();
+    this.myRef_close = React.createRef();
     this.Number_Answers = this.Number_Answers.bind(this);
     this.ChooseTopic = this.ChooseTopic.bind(this);
     this.NewQuestion = this.NewQuestion.bind(this);
@@ -52,6 +56,9 @@ export class App extends React.Component {
     this.focus_3st_q = this.focus_3st_q.bind(this);
     this.focus_4st_q = this.focus_4st_q.bind(this);
     this.focus_reset_q = this.focus_reset_q.bind(this);
+    this.blur_list_theme = this.blur_list_theme.bind(this);
+    this.blur_show_res = this.blur_show_res.bind(this);
+    this.blur_close = this.blur_close.bind(this);
     //Timeout = setTimeout(()=> this.assistant_global_event("next_question"), 3000);
 
     this.assistant = initializeAssistant(() => this.getStateForAssistant() );
@@ -77,9 +84,18 @@ export class App extends React.Component {
   focus_4st_q() {
     this.myRef4.current.blur();
   }
-  
   focus_reset_q(){
     this.myRef_reset.current.blur();
+  }
+  blur_list_theme(){
+    this.myRef_list_theme.current.blur();
+  }
+  blur_show_res(){
+    this.myRef_show_res.current.blur();
+  }
+
+  blur_close(){
+    this.myRef_close.current.blur();
   }
 
   focusTextInput = () => {
@@ -134,6 +150,10 @@ export class App extends React.Component {
         }
         case 'reset_results':{
           this.setState({show_results: []});
+          break;
+        }
+        case 'close':{
+          this.assistant.close();
           break;
         }
         default:
@@ -283,6 +303,7 @@ export class App extends React.Component {
     })
     if(a === "show_res"){
       this.ShowResults();
+      this.blur_show_res();
     }
     else if(a === "del_res"){
       this.DeleteResults();
@@ -290,6 +311,7 @@ export class App extends React.Component {
     }
     else{
       this.ShowTopics();
+      this.blur_list_theme();
     }
     
   }
@@ -342,8 +364,10 @@ export class App extends React.Component {
         <div className='Text'>
         </div >
       </div>     
-       <ul className="positionButtons"> <p><button onClick={() =>this.assistant.close()} className ="third_button">Выход</button></p>
-       <p><button onClick={() =>/* this.WriteResults()*/ this.assistant_global_event("show_res")} className ="fourth_button">Результаты</button></p></ul>
+       <ul className="positionButtons"> 
+        <p><input type = "button" ref = {this.myRef_close}readOnly = {true} value = "Выход" onClick={() =>{this.assistant.close(); this.blur_close()}} className ="third_button"/></p>
+        <p><input type = "button" ref = {this.myRef_show_res}readOnly = {true} value = "Результаты" onClick={() =>this.assistant_global_event("show_res")} className ="fourth_button"/></p>
+       </ul>
     </div>)
   }
   ShowTopics() {
@@ -366,10 +390,11 @@ export class App extends React.Component {
     <div className="App">
  <div className="Answers">
         <div className="Questions"> {this.state.questions[this.state.rand].task}</div>
-          <div className="button_res"><p><input  className= "Hieght"ref = {this.myRef1} type = "button" value = {1 + '. ' + this.state.questions[this.state.rand].answer1} onClick={() => this.assistant_param(1, "answer")} className = "but_res"/></p>
-          <p><input ref = {this.myRef2} type = "button" value = {2 + '. ' + this.state.questions[this.state.rand].answer2} onClick={() => this.assistant_param(2, "answer")} className = "but_res"/></p>
-          <p><input ref = {this.myRef3} type = "button" value = {3 + '. ' + this.state.questions[this.state.rand].answer3} onClick={() => this.assistant_param(3, "answer")} className = "but_res"/></p>
-          <p><input ref = {this.myRef4} type = "button" value = {4 + '. ' + this.state.questions[this.state.rand].answer4} onClick={() => this.assistant_param(4, "answer")} className = "but_res"/></p>
+          <div className="button_res">
+            <p><input  className= "Hieght"ref = {this.myRef1} type = "button" value = {1 + '. ' + this.state.questions[this.state.rand].answer1} onClick={() => this.assistant_param(1, "answer")} className = "but_res"/></p>
+            <p><input ref = {this.myRef2} type = "button" value = {2 + '. ' + this.state.questions[this.state.rand].answer2} onClick={() => this.assistant_param(2, "answer")} className = "but_res"/></p>
+            <p><input ref = {this.myRef3} type = "button" value = {3 + '. ' + this.state.questions[this.state.rand].answer3} onClick={() => this.assistant_param(3, "answer")} className = "but_res"/></p>
+            <p><input ref = {this.myRef4} type = "button" value = {4 + '. ' + this.state.questions[this.state.rand].answer4} onClick={() => this.assistant_param(4, "answer")} className = "but_res"/></p>
            <div className="Result">
           <ul>Ответ: {this.state.answer}</ul>
           <ul> Результат: {this.state.result} </ul> 
@@ -377,8 +402,10 @@ export class App extends React.Component {
         </div>
       </div>
 
-     <ul className="positionButtons"> <p><button onClick={() => this.assistant_global_event("list_theme")} className ="third_button"><span>Список тем</span></button></p>
-      <p><button onClick={() => this.assistant_global_event("show_res")} className ="fourth_button">Результаты</button></p></ul>
+     <ul className="positionButtons">
+        <p><input type = "button" ref = {this.myRef_list_theme} readOnly = {true} value = "Список тем" onClick={() => this.assistant_global_event("list_theme")} className ="third_button"/></p>
+        <p><input type = "button" ref = {this.myRef_show_res} readOnly = {true} value = "Результаты" onClick={() => this.assistant_global_event("show_res")} className ="fourth_button"/></p>
+      </ul>
     </div>)
   }
   
@@ -409,8 +436,9 @@ export class App extends React.Component {
         <div className='Text'>
         </div>
       </div>
-      <ul className="positionButtons"><p><button onClick={() => this.assistant_global_event("list_theme")} className ="third_button"><span>Список тем</span></button></p>
-      <p><input ref = {this.myRef_reset} value = "Сброс" readOnly = {true} onClick={() => this.assistant_global_event("del_res")} className ="fourth_button"/></p></ul>
+      <ul className="positionButtons">
+      <p><input type = "button" ref = {this.myRef_list_theme} value = "Список тем" readOnly = {true} onClick={() => this.assistant_global_event("list_theme")} className ="third_button"/></p>
+      <p><input type = "button" ref = {this.myRef_reset} value = "Сброс" readOnly = {true} onClick={() => this.assistant_global_event("del_res")} className ="fourth_button"/></p></ul>
     </div>)
   }
   WriteLoading(){
