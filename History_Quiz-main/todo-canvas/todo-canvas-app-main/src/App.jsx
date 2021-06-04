@@ -365,7 +365,7 @@ export class App extends React.Component {
         </div >
       </div>     
        <ul className="positionButtons"> 
-        <p><input type = "button" ref = {this.myRef_close}readOnly = {true} value = "Выход" onClick={() =>{this.assistant.close(); this.blur_close()}} className ="third_button"/></p>
+        <p><input type = "button" ref = {this.myRef_close}readOnly = {true} value = "Выйти" onClick={() =>{this.assistant.close(); this.blur_close()}} className ="third_button"/></p>
         <p><input type = "button" ref = {this.myRef_show_res}readOnly = {true} value = "Результаты" onClick={() =>this.assistant_global_event("show_res")} className ="fourth_button"/></p>
        </ul>
     </div>)
